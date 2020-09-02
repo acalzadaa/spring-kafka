@@ -1,0 +1,11 @@
+server:
+  port: 9999
+spring:
+  kafka:    bootstrap-servers:
+      - localhost:9092
+
+app:
+  kafka:
+    bootstrap_server: localhost:9092
+  topics:
+    topicname: purchase
