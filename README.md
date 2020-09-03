@@ -44,6 +44,7 @@ This project intents to explore all there is to know about kafka. I'll start cre
 
 ### Project: spring-kafka-simple-consumer
 - Mission: listen to the test topic and log the values found using sld4j
+- Fire up docker-compose with zookeeper, kafka and kafdrop
 - Fire up the spring-kafka-simple-consumer
 - using the kafka-console-producer and create one or more messages
 - you will see the messages in the spring-kafka-simple-consumer console
@@ -53,8 +54,10 @@ This project intents to explore all there is to know about kafka. I'll start cre
 
 ### Project: spring-kafka-simple-producer
 - Mission: create a message and send it to the test topic
+- Fire up docker-compose with zookeeper, kafka and kafdrop
 - Fire up the spring-kafka-simple-producer
-- using Postman, send a message using the following url: POST:localhost:9998/app/kafka/text
+- Fire up the spring-kafka-simple-consumer
+- using Postman, send a parameter message with a text, using the following url: POST:localhost:9989/app/kafka/text
 - you will see the messages in the kafka-console-consumer, kafdrop and in spring-kafka-simple-consumer
 - log to zipkin
 

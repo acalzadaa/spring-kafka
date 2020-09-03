@@ -11,7 +11,7 @@ public class ConsumerService {
 
 	@KafkaListener(topics = "test", groupId = "first")
 	public void consume(String message) {
-		log.debug(String.format("Received the following message [ %s ]", message));
+		log.info(String.format("Received the following message [ %s ]", message));
 		System.out.println("Received the following message: " + message);
 	}
 }
