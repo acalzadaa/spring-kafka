@@ -12,8 +12,19 @@ public class TopicConfigs {
 	@Value(value = "${spring.kafka.producer.bootstrap-servers}")
 	private String bootstrapAddress;
 
+	@Value("${spring.kafka.topic.general}")
+	private String topicNameGeneral;
+
+	@Value("${spring.kafka.topic.greeting}")
+	private String topicNameGreeting;
+
 	@Bean
 	public NewTopic generalTopic() {
-		return TopicBuilder.name("test").partitions(1).replicas(1).build();
+		return TopicBuilder.name(topicNameGeneral).partitions(1).replicas(1).build();
+	}
+
+	@Bean
+	public NewTopic greetingsTopic() {
+		return TopicBuilder.name(topicNameGreeting).partitions(1).replicas(1).build();
 	}
 }

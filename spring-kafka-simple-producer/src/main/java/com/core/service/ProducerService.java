@@ -8,20 +8,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import com.core.model.Greeting;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class ProducerService {
 
-	@Value("${spring.kafka.topic}")
-	private String topicName;
+	@Value("${spring.kafka.topic.general}")
+	private String topicNameGeneral;
+
+	@Value("${spring.kafka.topic.greeting}")
+	private String topicNameGreeting;
 
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
 
-	public void sendMessage(String message) {
-		ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, message);
+	@Autowired
+	private KafkaTemplate<String, Greeting> kafkaTemplateGreeting;
+
+	public void sendMessage(String key, String message) {
+		ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicNameGeneral, key, message);
 
 		future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
 
@@ -40,4 +48,22 @@ public class ProducerService {
 			}
 		});
 	}
+
+	public void sendMessageGreeting(String key, Greeting greet) {
+		ListenableFuture<SendResult<String, Greeting>> future = this.kafkaTemplateGreeting.send(topicNameGreeting, key,
+				greet);
+
+		future.addCallback(new ListenableFutureCallback<SendResult<String, Greeting>>() {
+			@Override
+			public void onSuccess(SendResult<String, Greeting> result) {
+				log.info("Sent greeting: " + greet.toString() + " with offset: " + result.getRecordMetadata().offset());
+			}
+
+			@Override
+			public void onFailure(Throwable ex) {
+				log.error("Unable to send message : " + greet.toString(), ex);
+			}
+		});
+	}
+
 }

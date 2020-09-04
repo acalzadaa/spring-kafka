@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
+
+import com.core.model.Greeting;
 
 @Configuration
 public class ProducerConfigs {
@@ -30,6 +33,20 @@ public class ProducerConfigs {
 	@Bean
 	public KafkaTemplate<String, String> kafkaTemplate() {
 		return new KafkaTemplate<>(producerFactory());
+	}
+
+	@Bean
+	public ProducerFactory<String, Greeting> producerFactoryGreeting() {
+		Map<String, Object> props = new HashMap<>();
+		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+		return new DefaultKafkaProducerFactory<>(props);
+	}
+
+	@Bean
+	public KafkaTemplate<String, Greeting> kafkaTemplateGreeting() {
+		return new KafkaTemplate<>(producerFactoryGreeting());
 	}
 
 }

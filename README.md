@@ -6,7 +6,7 @@ This project intents to explore all there is to know about kafka. I'll start cre
 
 ### Fire up kafka, zookeeper and kafdrop
 
-- In the root of the project, execute: *docker-compose up*
+- In the root of the project, execute: *docker-compose up -d*
 
 ### Check Kafka status use kafdrop
 
@@ -16,7 +16,8 @@ This project intents to explore all there is to know about kafka. I'll start cre
 
 ### Connect to Kafka single instance
 
-- *docker exec -it "container id" bash/sh*
+- use docker: *docker exec -it "container id" bash/sh*
+- or docker-compose: *docker-compose exec -it broker bash*
 
 - p.e docker exec -it broker bash
 
@@ -31,6 +32,7 @@ This project intents to explore all there is to know about kafka. I'll start cre
 | cont... | `--bootstrap-server` | address of kafka server|
 | cont... | `replication-factor` | |
 | cont... | `partitions` | |
+| cont... | `--from-beginning` | |
 
 ### start a console-producer to test topic
 
@@ -61,9 +63,49 @@ This project intents to explore all there is to know about kafka. I'll start cre
 - you will see the messages in the kafka-console-consumer, kafdrop and in spring-kafka-simple-consumer
 - log to zipkin
 
-## Creating an Object Producer
+## Configuring Key:Values 
 
+### Project: configuring a console driven producer with key:value active
+
+kafka-console-producer --topic test --broker-list broker:9092\
+  --property parse.key=true\
+  --property key.separator=":"
+  
+add messages using the key:value pattern
+
+f.e:
+
+key1:hi
+key1:how are you doing
+key2:today
+
+in a method:
+
+kafkaTemplate.send(topicName, key, message);
+
+### Project: configuring a console driven consumer with key:value active
+
+kafka-console-consumer --topic test --bootstrap-server broker:9092 \
+ --from-beginning \
+ --property print.key=true \
+ --property key.separator="-"
+ 
+in a method:
+ 
+@KafkaListener(topics = topic, groupId = groupid)
+public void consume(@Payload String message,
+@Header(name = KafkaHeaders.RECEIVED_MESSAGE_KEY, required = false) String key,
+@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+@Header(KafkaHeaders.RECEIVED_TOPIC) String topic, 
+@Header(KafkaHeaders.RECEIVED_TIMESTAMP) long ts) {
+	...
+}
+ 
 ## Creating an Object Consumer
+
+
+
+## Creating an Object Producer
 
 ## Creating a filter Consumer
 
