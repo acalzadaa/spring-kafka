@@ -3,4 +3,6 @@ server:
 spring:
   kafka:
     producer:      bootstrap-servers: localhost:9092
-    topic: test
+    topic: 
+      general: test
+      greeting: test-greeting
