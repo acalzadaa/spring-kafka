@@ -2,6 +2,7 @@ package com.core.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,9 +30,9 @@ public class ProducerController {
 	}
 
 	@PostMapping(value = "/greeting")
-	public Greeting sendMessageGreeting(Greeting greet) {
+	public Greeting sendMessageGreeting(@RequestBody Greeting greet) {
 		log.info("Processing: " + greet.toString());
-		this.producerService.sendMessageGreeting("greet_app", new Greeting("hello"));
+		this.producerService.sendMessageGreeting("greet_app", greet);
 		return greet;
 	}
 
